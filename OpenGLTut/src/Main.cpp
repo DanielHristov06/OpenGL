@@ -2,6 +2,9 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
 
 // Setting up the variable for the dimensions of the screen
 const unsigned int WIDTH = 1280;
@@ -37,8 +40,8 @@ static unsigned int createShader(std::string& source, unsigned int shaderType) {
 
 	if (!success) {
 		glGetShaderInfoLog(shader, 512, NULL, infoLog);
-		std::cout << "Failed to compile " << (shaderType == GL_VERTEX_SHADER ? "vertex" : "fragment") << " shader" << std::endl;
-		std::cout << infoLog << std::endl;
+		std::cerr << "Failed to compile " << (shaderType == GL_VERTEX_SHADER ? "vertex" : "fragment") << " shader" << std::endl;
+		std::cerr << infoLog << std::endl;
 		glDeleteShader(shader);
 	}
 
@@ -66,6 +69,20 @@ static unsigned int createProgram(std::string& vertexShader, std::string& fragme
 	glDeleteShader(FS);
 
 	return shaderProgram;
+}
+
+// A function that loads a shader from a file
+std::string loadShader(const std::string filePath) {
+	std::ifstream file(filePath);
+
+	if (!file.is_open()) {
+		std::cerr << "Faile to open shader file: " << filePath << std::endl;
+		return "";
+	}
+
+	std::stringstream ss;
+	ss << file.rdbuf();
+	return ss.str();
 }
 
 int main() {
@@ -122,17 +139,8 @@ int main() {
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, NULL);
 	glEnableVertexAttribArray(0);
 
-	std::string vertexShader = "#version 460 core\n"
-		"layout (location = 0) in vec3 aPos;\n"
-		"void main() {\n"
-		"gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-		"}\n";
-
-	std::string fragmentShader = "#version 460 core\n"
-		"out vec4 FragColor;\n"
-		"void main() {\n"
-		"FragColor = vec4(1.0, 0.5, 0.2, 1.0);\n"
-		"}\n";
+	std::string vertexShader = loadShader("shaders/Default.vert");
+	std::string fragmentShader = loadShader("shaders/Default.frag");
 
 	unsigned int shaderProgram = createProgram(vertexShader, fragmentShader);
 
