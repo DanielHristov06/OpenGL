@@ -61,6 +61,8 @@ static unsigned int createProgram(std::string& vertexShader, std::string& fragme
 	glAttachShader(shaderProgram, VS);
 	glAttachShader(shaderProgram, FS);
 
+	glValidateProgram(shaderProgram);
+
 	// Linking the program
 	glLinkProgram(shaderProgram);
 
@@ -118,26 +120,41 @@ int main() {
 		return -1;
 	}
 
-	float vertices[9] = {
-		-0.5f, -0.5f, 0.f,
-		 0.5f, -0.5f, 0.f,
-		  0.f,  0.5f, 0.f
+	float vertices[] = {
+		 0.5f,  0.5f, 0.0f,  // top right
+		 0.5f, -0.5f, 0.0f,  // bottom right
+		-0.5f, -0.5f, 0.0f,  // bottom left
+		-0.5f,  0.5f, 0.0f   // top left 
 	};
 
-	// Creattes and binds a vertex buffer object
-	unsigned int VBO;
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	unsigned int indices[] = {  // note that we start from 0!
+		0, 1, 3,   // first triangle
+		1, 2, 3    // second triangle
+	};
 
+	// Vertex buffer object, vertex array object, element buffer object
+	unsigned int VBO, VAO, EBO;
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
+
+	// Bind the vertex array object first
+	glBindVertexArray(VAO);
+
+	// Bind the other two
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	// Creates and binds a vertex array object
-	unsigned int VAO;
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, NULL);
 	glEnableVertexAttribArray(0);
+
+	// Unbind
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	glBindVertexArray(0);
 
 	std::string vertexShader = loadShader("shaders/Default.vert");
 	std::string fragmentShader = loadShader("shaders/Default.frag");
@@ -155,8 +172,11 @@ int main() {
 
 		// Setting the shader program (which one to use)
 		glUseProgram(shaderProgram);
+
+		glBindVertexArray(VAO);
+
 		// Drawing the triangles
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		// Swap buffers and poll IO events
 		glfwSwapBuffers(window);
