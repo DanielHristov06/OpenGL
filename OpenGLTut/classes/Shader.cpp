@@ -44,10 +44,10 @@ Shader::Shader(std::string vertexShaderPath, std::string fragmentShaderPath) {
 		fs.open(fragmentShaderPath);
 
 		if (!vs.is_open()) {
-			throw "Failed to open the vertex shader";
+			throw std::runtime_error("Failed to open the vertex shader");
 		}
 		if (!fs.is_open()) {
-			throw "Failed to open the fragment shader";
+			throw std::runtime_error("Failed to open the fragment shader");
 		}
 
 		std::stringstream vShaderStream, fShaderStream;
@@ -59,6 +59,9 @@ Shader::Shader(std::string vertexShaderPath, std::string fragmentShaderPath) {
 
 		vCode = vShaderStream.str();
 		fCode = fShaderStream.str();
+	}
+	catch (const std::exception& e) {
+		std::cout << "Couldn't create a program: " << e.what() << std::endl;
 	}
 	catch (std::string e) {
 		std::cout << "Couldn't create a program: " << e << std::endl;
