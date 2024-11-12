@@ -6,6 +6,8 @@
 #include <sstream>
 #include <string>
 
+#include <Shader.h>
+
 // Setting up the variable for the dimensions of the screen
 const unsigned int WIDTH = 1280;
 const unsigned int HEIGHT = 720;
@@ -20,71 +22,6 @@ static void processInput(GLFWwindow *window) {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, true);
 	}
-}
-
-// A function to create a shader, not matter what type
-static unsigned int createShader(std::string& source, unsigned int shaderType) {
-	// Shader creation
-	unsigned int shader = glCreateShader(shaderType);
-	// Convert the standart string to const char* (c style string)
-	const char* src = source.c_str();
-
-	// Compile the shader
-	glShaderSource(shader, 1, &src, NULL);
-	glCompileShader(shader);
-
-	// Print any error if the compilation fails
-	int success;
-	char infoLog[512];
-	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-
-	if (!success) {
-		glGetShaderInfoLog(shader, 512, NULL, infoLog);
-		std::cerr << "Failed to compile " << (shaderType == GL_VERTEX_SHADER ? "vertex" : "fragment") << " shader" << std::endl;
-		std::cerr << infoLog << std::endl;
-		glDeleteShader(shader);
-	}
-
-	return shader;
-}
-
-// A function to create a program with a vertex and a fragment shader
-static unsigned int createProgram(std::string& vertexShader, std::string& fragmentShader) {
-	// Program creation
-	unsigned int shaderProgram = glCreateProgram();
-
-	// Creating the two shaders
-	unsigned int VS = createShader(vertexShader, GL_VERTEX_SHADER);
-	unsigned int FS = createShader(fragmentShader, GL_FRAGMENT_SHADER);
-
-	//Attaching the shaders to the progtam
-	glAttachShader(shaderProgram, VS);
-	glAttachShader(shaderProgram, FS);
-
-	glValidateProgram(shaderProgram);
-
-	// Linking the program
-	glLinkProgram(shaderProgram);
-
-	// Deleting the shaders (we don't need tghem anymore)
-	glDeleteShader(VS);
-	glDeleteShader(FS);
-
-	return shaderProgram;
-}
-
-// A function that loads a shader from a file
-std::string loadShader(const std::string filePath) {
-	std::ifstream file(filePath);
-
-	if (!file.is_open()) {
-		std::cerr << "Faile to open shader file: " << filePath << std::endl;
-		return "";
-	}
-
-	std::stringstream ss;
-	ss << file.rdbuf();
-	return ss.str();
 }
 
 int main() {
@@ -121,22 +58,17 @@ int main() {
 	}
 
 	float vertices[] = {
-		 0.5f,  0.5f, 0.0f,  // top right
-		 0.5f, -0.5f, 0.0f,  // bottom right
-		-0.5f, -0.5f, 0.0f,  // bottom left
-		-0.5f,  0.5f, 0.0f   // top left 
-	};
-
-	unsigned int indices[] = {  // note that we start from 0!
-		0, 1, 3,   // first triangle
-		1, 2, 3    // second triangle
+		// positions         // colors
+		 0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // bottom right
+		-0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // bottom left
+		 0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // top 
 	};
 
 	// Vertex buffer object, vertex array object, element buffer object
-	unsigned int VBO, VAO, EBO;
+	unsigned int VBO, VAO;
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
+	//glGenBuffers(1, &EBO);
 
 	// Bind the vertex array object first
 	glBindVertexArray(VAO);
@@ -145,21 +77,15 @@ int main() {
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, NULL);
+	// Vertex array object
+	// position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (void*)NULL);
 	glEnableVertexAttribArray(0);
+	// color attribute
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (void*)(sizeof(float) * 3));
+	glEnableVertexAttribArray(1);
 
-	// Unbind
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	glBindVertexArray(0);
-
-	std::string vertexShader = loadShader("shaders/Default.vert");
-	std::string fragmentShader = loadShader("shaders/Default.frag");
-
-	unsigned int shaderProgram = createProgram(vertexShader, fragmentShader);
+	Shader shader("shaders/Default.vert", "shaders/Default.frag");
 
 	// Render loop
 	while (!glfwWindowShouldClose(window)) {
@@ -171,12 +97,12 @@ int main() {
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		// Setting the shader program (which one to use)
-		glUseProgram(shaderProgram);
+		shader.use();
 
 		glBindVertexArray(VAO);
 
 		// Drawing the triangles
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		// Swap buffers and poll IO events
 		glfwSwapBuffers(window);
@@ -184,7 +110,9 @@ int main() {
 	}
 
 	// Delete the shader program
-	glDeleteProgram(shaderProgram);
+	shader.destroy();
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
 
 	//Terminate GLFW
 	glfwTerminate();
