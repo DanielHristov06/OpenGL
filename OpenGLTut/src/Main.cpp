@@ -1,11 +1,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <string>
-
 #include <Shader.h>
 
 // Setting up the variable for the dimensions of the screen
