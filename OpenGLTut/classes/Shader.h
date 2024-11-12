@@ -10,6 +10,8 @@ public:
 
 	// Constructor (creates the shader program)
 	Shader(std::string vertexShaderPath, std::string fragmentShaderPath);
+	// Destructor
+	~Shader();
 
 	// Use/activate the shader
 	void use();

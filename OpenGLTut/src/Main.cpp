@@ -104,8 +104,7 @@ int main() {
 		glfwPollEvents();
 	}
 
-	// Delete the shader program
-	shader.destroy();
+	// Delete the vertex arrays and the buffers
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
 
