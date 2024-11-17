@@ -1,11 +1,14 @@
 #pragma once
 
+#include <Vector2.h>
+#include <Vector3.h>
+
 static unsigned int VAO, VBO, EBO;
 
 void InitBuffers();
 
-void drawRectangle(float x, float y, float w, float h, float r, float g, float b);
+void drawRectangle(Vector2 position, Vector2 size, Vector3 color);
 
-void drawTriangle(float p1X, float p1Y, float p2X, float p2Y, float p3X, float p3Y, float r, float g, float b);
+void drawTriangle(Vector2 p1, Vector2 p2, Vector2 p3, Vector3 color);
 
 void deleteBuffers();

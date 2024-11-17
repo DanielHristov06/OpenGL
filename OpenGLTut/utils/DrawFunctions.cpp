@@ -41,15 +41,15 @@ void InitBuffers() {
 	glBindVertexArray(0);
 }
 
-void drawRectangle(float x, float y, float w, float h, float r, float g, float b) {
-	float ndcX1 = (x / Settings::WIDTH) * 2.0f - 1.0f;
-	float ndcY1 = 1.0f - (y / Settings::HEIGHT) * 2.0f;
-	float ndcX2 = ((x + w) / Settings::WIDTH) * 2.0f - 1.0f;
-	float ndcY2 = 1.0f - ((y + h) / Settings::HEIGHT) * 2.0f;
+void drawRectangle(Vector2 position, Vector2 size, Vector3 color) {
+	float ndcX1 = (position.x / Settings::WIDTH) * 2.0f - 1.0f;
+	float ndcY1 = 1.0f - (position.y / Settings::HEIGHT) * 2.0f;
+	float ndcX2 = ((position.x + size.x) / Settings::WIDTH) * 2.0f - 1.0f;
+	float ndcY2 = 1.0f - ((position.y + size.y) / Settings::HEIGHT) * 2.0f;
 
-	float norR = r / 255.0f;
-	float norG = g / 255.0f;
-	float norB = b / 255.0f;
+	float norR = color.x / 255.0f;
+	float norG = color.y / 255.0f;
+	float norB = color.z / 255.0f;
 
 	glBindVertexArray(VAO);
 
@@ -69,17 +69,17 @@ void drawRectangle(float x, float y, float w, float h, float r, float g, float b
 	glBindVertexArray(0);
 }
 
-void drawTriangle(float p1X, float p1Y, float p2X, float p2Y, float p3X, float p3Y, float r, float g, float b) {
-	float ndcP1X = (p1X / Settings::WIDTH) * 2.0f - 1.0f;
-	float ndsP1Y = 1.0f - (p1Y / Settings::HEIGHT) * 2.0f;
-	float ndcP2X = (p2X / Settings::WIDTH) * 2.0f - 1.0f;
-	float ndsP2Y = 1.0f - (p2Y / Settings::HEIGHT) * 2.0f;
-	float ndcP3X = (p3X / Settings::WIDTH) * 2.0f - 1.0f;
-	float ndsP3Y = 1.0f - (p3Y / Settings::HEIGHT) * 2.0f;
+void drawTriangle(Vector2 p1, Vector2 p2, Vector2 p3, Vector3 color) {
+	float ndcP1X = (p1.x / Settings::WIDTH) * 2.0f - 1.0f;
+	float ndsP1Y = 1.0f - (p1.y / Settings::HEIGHT) * 2.0f;
+	float ndcP2X = (p2.x / Settings::WIDTH) * 2.0f - 1.0f;
+	float ndsP2Y = 1.0f - (p2.y / Settings::HEIGHT) * 2.0f;
+	float ndcP3X = (p3.x / Settings::WIDTH) * 2.0f - 1.0f;
+	float ndsP3Y = 1.0f - (p3.y / Settings::HEIGHT) * 2.0f;
 
-	float norR = r / 255.0f;
-	float norG = g / 255.0f;
-	float norB = b / 255.0f;
+	float norR = color.x / 255.0f;
+	float norG = color.y / 255.0f;
+	float norB = color.z / 255.0f;
 
 	float updatedVertices[] = {
 		ndcP1X, ndsP1Y, 0.0f, norR, norG, norB,

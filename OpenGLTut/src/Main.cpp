@@ -5,10 +5,6 @@
 #include <Shader.h>
 #include <DrawFunctions.h>
 
-// Setting up the variable for the dimensions of the screen
-const unsigned int WIDTH = 1280;
-const unsigned int HEIGHT = 720;
-
 // Whenever the window size changes (by OS or by the user) this callback function gets called
 static void framebufferSizeCallback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
@@ -71,8 +67,8 @@ int main() {
 		shader.use();
 
 		// Drawing the triangles
-		drawRectangle(32, 32, 100, 50, 255, 0, 0);
-		drawTriangle(640, 64, 64, 600, 1280 - 64, 600, 0, 0, 255);
+		drawRectangle(Vector2(32, 32), Vector2(100, 50), Vector3(255, 0, 0));
+		drawTriangle(Vector2(640, 64), Vector2(64, 600), Vector2(1280 - 64, 600), Vector3(0, 0, 255));
 
 		// Swap buffers and poll IO events
 		glfwSwapBuffers(window);
