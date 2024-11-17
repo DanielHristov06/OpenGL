@@ -169,6 +169,7 @@
     <ClCompile Include="utils\DrawFunctions.cpp" />
     <ClCompile Include="classes\Vector3.cpp" />
     <ClCompile Include="classes\Vector2.cpp" />
+    <ClCompile Include="utils\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\Default.frag">
@@ -192,6 +193,9 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </None>
+    <None Include="shaders\MixTexture.frag" />
+    <None Include="shaders\Texture.frag" />
+    <None Include="shaders\Texture.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="classes\Shader.h" />
@@ -199,6 +203,12 @@
     <ClInclude Include="utils\Settings.h" />
     <ClInclude Include="classes\Vector3.h" />
     <ClInclude Include="classes\Vector2.h" />
+    <ClInclude Include="utils\stb_image.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="textures\awesomeface.png" />
+    <Image Include="textures\container.jpg" />
+    <Image Include="textures\cpu.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
