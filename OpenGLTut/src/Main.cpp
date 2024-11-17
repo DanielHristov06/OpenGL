@@ -54,7 +54,7 @@ int main() {
 		return -1;
 	}
 
-	InitRectangle();
+	InitBuffers();
 
 	Shader shader("shaders/Default.vert", "shaders/Default.frag");
 
@@ -72,15 +72,16 @@ int main() {
 
 		// Drawing the triangles
 		drawRectangle(32, 32, 100, 50, 255, 0, 0);
+		drawTriangle(640, 64, 64, 600, 1280 - 64, 600, 0, 0, 255);
 
 		// Swap buffers and poll IO events
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
 
-	//Terminate GLFW
-	deleteRectangle();
+	deleteBuffers();
 
+	//Terminate GLFW
 	glfwTerminate();
 	return 0;
 }

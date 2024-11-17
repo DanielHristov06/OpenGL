@@ -3,9 +3,7 @@
 #include <Settings.h>
 #include <glad/glad.h>
 
-unsigned int VAO, VBO, EBO;
-
-void InitRectangle() {
+void InitBuffers() {
 	float vertices[] = {
 		// positions		// colors
 		 0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f, // top right
@@ -71,7 +69,36 @@ void drawRectangle(float x, float y, float w, float h, float r, float g, float b
 	glBindVertexArray(0);
 }
 
-void deleteRectangle() {
+void drawTriangle(float p1X, float p1Y, float p2X, float p2Y, float p3X, float p3Y, float r, float g, float b) {
+	float ndcP1X = (p1X / Settings::WIDTH) * 2.0f - 1.0f;
+	float ndsP1Y = 1.0f - (p1Y / Settings::HEIGHT) * 2.0f;
+	float ndcP2X = (p2X / Settings::WIDTH) * 2.0f - 1.0f;
+	float ndsP2Y = 1.0f - (p2Y / Settings::HEIGHT) * 2.0f;
+	float ndcP3X = (p3X / Settings::WIDTH) * 2.0f - 1.0f;
+	float ndsP3Y = 1.0f - (p3Y / Settings::HEIGHT) * 2.0f;
+
+	float norR = r / 255.0f;
+	float norG = g / 255.0f;
+	float norB = b / 255.0f;
+
+	float updatedVertices[] = {
+		ndcP1X, ndsP1Y, 0.0f, norR, norG, norB,
+		ndcP2X, ndsP2Y, 0.0f, norR, norG, norB,
+		ndcP3X, ndsP3Y, 0.0f, norR, norG, norB
+	};
+
+	glBindVertexArray(VAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(updatedVertices), updatedVertices);
+
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+
+	glBindVertexArray(0);
+}
+
+void deleteBuffers() {
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &EBO);
 }
