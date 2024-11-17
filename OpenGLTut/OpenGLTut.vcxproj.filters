@@ -27,6 +27,9 @@
     <ClCompile Include="classes\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="utils\DrawFunctions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\Default.vert">
@@ -38,6 +41,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="classes\Shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\DrawFunctions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Settings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

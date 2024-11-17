@@ -61,10 +61,10 @@ Shader::Shader(std::string vertexShaderPath, std::string fragmentShaderPath) {
 		fCode = fShaderStream.str();
 	}
 	catch (const std::exception& e) {
-		std::cout << "Couldn't create a program: " << e.what() << std::endl;
+		std::cerr << "Couldn't create a program: " << e.what() << std::endl;
 	}
 	catch (std::string e) {
-		std::cout << "Couldn't create a program: " << e << std::endl;
+		std::cerr << "Couldn't create a program: " << e << std::endl;
 	}
 
 	unsigned int vertexShader = createShader(vCode, GL_VERTEX_SHADER);

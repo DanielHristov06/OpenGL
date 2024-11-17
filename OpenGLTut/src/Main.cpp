@@ -1,7 +1,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <Settings.h>
 #include <Shader.h>
+#include <DrawFunctions.h>
 
 // Setting up the variable for the dimensions of the screen
 const unsigned int WIDTH = 1280;
@@ -33,11 +35,11 @@ int main() {
 #endif
 
 	// Window creation
-	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Wow, a window.", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(Settings::WIDTH, Settings::HEIGHT, "Wow, a window.", NULL, NULL);
 
 	// Check if the window is created
 	if (window == NULL) {
-		std::cout << "Failed to create a window" << std::endl;
+		std::cerr << "Failed to create a window" << std::endl;
 		glfwTerminate();
 		return -1;
 	}
@@ -48,37 +50,11 @@ int main() {
 
 	// Initialize Glad (load all OpenGL function pointers)
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-		std::cout << "Failed to initialize GLAD" << std::endl;
+		std::cerr << "Failed to initialize GLAD" << std::endl;
 		return -1;
 	}
 
-	float vertices[] = {
-		// positions         // colors
-		 0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // bottom right
-		-0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // bottom left
-		 0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // top 
-	};
-
-	// Vertex buffer object, vertex array object, element buffer object
-	unsigned int VBO, VAO;
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	//glGenBuffers(1, &EBO);
-
-	// Bind the vertex array object first
-	glBindVertexArray(VAO);
-
-	// Bind the other two
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	// Vertex array object
-	// position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (void*)NULL);
-	glEnableVertexAttribArray(0);
-	// color attribute
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (void*)(sizeof(float) * 3));
-	glEnableVertexAttribArray(1);
+	InitRectangle();
 
 	Shader shader("shaders/Default.vert", "shaders/Default.frag");
 
@@ -94,21 +70,17 @@ int main() {
 		// Setting the shader program (which one to use)
 		shader.use();
 
-		glBindVertexArray(VAO);
-
 		// Drawing the triangles
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		drawRectangle(32, 32, 100, 50, 255, 0, 0);
 
 		// Swap buffers and poll IO events
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
 
-	// Delete the vertex arrays and the buffers
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
-
 	//Terminate GLFW
+	deleteRectangle();
+
 	glfwTerminate();
 	return 0;
 }
