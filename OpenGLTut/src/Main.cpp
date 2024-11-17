@@ -53,7 +53,7 @@ int main() {
 
 	InitBuffers();
 
-	unsigned int index = loadTexture("textures/container.jpg");
+	unsigned int index = loadTexture("textures/awesomeface.png");
 
 	Shader shader("shaders/Default.vert", "shaders/Default.frag");
 	Shader texShader("shaders/Texture.vert", "shaders/Texture.frag");
