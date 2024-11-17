@@ -1,22 +1,7 @@
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-
 #include <Settings.h>
 #include <Shader.h>
 #include <DrawFunctions.h>
-#include <stb_image.h>
-
-// Whenever the window size changes (by OS or by the user) this callback function gets called
-static void framebufferSizeCallback(GLFWwindow* window, int width, int height) {
-	glViewport(0, 0, width, height);
-}
-
-// Process all input
-static void processInput(GLFWwindow *window) {
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-		glfwSetWindowShouldClose(window, true);
-	}
-}
+#include <OtherFunctions.h>
 
 int main() {
 	// Initialize and configure GLFW
@@ -82,6 +67,7 @@ int main() {
 		glfwPollEvents();
 	}
 
+	unloadTexture(index);
 	deleteBuffers();
 
 	//Terminate GLFW

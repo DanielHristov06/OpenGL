@@ -62,9 +62,7 @@ unsigned int loadTexture(const char* filePath) {
 	std::string fileStr(filePath);
 	GLenum format = GL_RGB;
 
-	if (fileStr.substr(fileStr.find_last_of(".") + 1) == "png") {
-		format = GL_RGBA;
-	}
+	if (fileStr.substr(fileStr.find_last_of(".") + 1) == "png") format = GL_RGBA;
 
 	int width, height, nrChannels;
 
@@ -83,6 +81,10 @@ unsigned int loadTexture(const char* filePath) {
 		stbi_image_free(data);
 		return -1;
 	}
+}
+
+void unloadTexture(unsigned int& texture) {
+	glDeleteTextures(1, &texture);
 }
 
 void drawRectangle(Vector2 position, Vector2 size, Vector3 color) {

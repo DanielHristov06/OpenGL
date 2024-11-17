@@ -169,6 +169,7 @@
     <ClCompile Include="utils\DrawFunctions.cpp" />
     <ClCompile Include="classes\Vector3.cpp" />
     <ClCompile Include="classes\Vector2.cpp" />
+    <ClCompile Include="utils\OtherFunctions.cpp" />
     <ClCompile Include="utils\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -200,6 +201,7 @@
   <ItemGroup>
     <ClInclude Include="classes\Shader.h" />
     <ClInclude Include="utils\DrawFunctions.h" />
+    <ClInclude Include="utils\OtherFunctions.h" />
     <ClInclude Include="utils\Settings.h" />
     <ClInclude Include="classes\Vector3.h" />
     <ClInclude Include="classes\Vector2.h" />

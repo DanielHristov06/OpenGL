@@ -9,6 +9,8 @@ void InitBuffers();
 
 unsigned int loadTexture(const char* filePath);
 
+void unloadTexture(unsigned int& texture);
+
 void drawRectangle(Vector2 position, Vector2 size, Vector3 color);
 
 void drawTriangle(Vector2 p1, Vector2 p2, Vector2 p3, Vector3 color);
