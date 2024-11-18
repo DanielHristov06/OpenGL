@@ -1,4 +1,6 @@
 #pragma once
+
+#include <Settings.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 

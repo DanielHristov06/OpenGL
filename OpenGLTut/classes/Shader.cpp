@@ -32,6 +32,8 @@ unsigned int Shader::createShader(std::string& source, unsigned int shaderType) 
 	return shader;
 }
 
+Shader::Shader() : programID(0){}
+
 Shader::Shader(std::string vertexShaderPath, std::string fragmentShaderPath) {
 	std::string vCode;
 	std::string fCode;
@@ -101,6 +103,10 @@ void Shader::setIntUniform(const std::string& name, int value) const {
 
 void Shader::setFloatUniform(const std::string& name, float value) const {
 	glUniform1f(glGetUniformLocation(programID, name.c_str()), value);
+}
+
+void Shader::setMat4Uniform(const std::string& name, const GLfloat* value) const {
+	glUniformMatrix4fv(glGetUniformLocation(programID, name.c_str()), 1, GL_FALSE, value);
 }
 
 void Shader::destroy() {

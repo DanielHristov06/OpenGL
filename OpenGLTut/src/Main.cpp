@@ -1,11 +1,10 @@
-#include <Settings.h>
 #include <Shader.h>
 #include <DrawFunctions.h>
 #include <OtherFunctions.h>
 
 int main() {
 	// Initialize and configure GLFW
-	glfwInit();
+	if (!glfwInit()) return -1;
 
 	// Set hints for the version and the core profile to the current context of GLFW
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -48,24 +47,21 @@ int main() {
 		// Input
 		processInput(window);
 
-		// Render
-		glClearColor(0.2f, 0.3f, 0.3f, 1.f);
-		glClear(GL_COLOR_BUFFER_BIT);
-
-		// Setting the shader program (which one to use)
-		shader.use();
+		drawClear(Vector3(0.2f, 0.3f, 0.3f), 1.0f);
 		
 		// Drawing the triangles
-		drawRectangle(Vector2(32, 32), Vector2(100, 50), Vector3(255, 0, 0));
-		drawTriangle(Vector2(640, 64), Vector2(64, 600), Vector2(1280 - 64, 600), Vector3(0, 0, 255));
+		drawRectangle(Vector2(32, 32), Vector2(100, 50), Vector3(255, 0, 0), shader);
+		drawTriangle(Vector2(640, 64), Vector2(64, 600), Vector2(1280 - 64, 600), Vector3(0, 0, 255), shader);
 
-		texShader.use();
-		drawTexture(index, Vector2(320, 32), Vector2(100, 100));
+		drawTexture(index, Vector2(320, 32), Vector2(100, 100), texShader);
 
 		// Swap buffers and poll IO events
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
+
+	//shader.destroy();
+	//texShader.destroy();
 
 	unloadTexture(index);
 	deleteBuffers();

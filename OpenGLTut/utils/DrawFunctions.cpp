@@ -1,10 +1,5 @@
 #include "DrawFunctions.h"
 
-#include <iostream>
-#include <Settings.h>
-#include <stb_image.h>
-#include <glad/glad.h>
-
 void InitBuffers() {
 	float vertices[] = {
 		// positions		// colors		  // texture coords
@@ -83,11 +78,16 @@ unsigned int loadTexture(const char* filePath) {
 	}
 }
 
+void drawClear(Vector3 color, float alpha) {
+	glClearColor(color.x, color.y, color.z, alpha);
+	glClear(GL_COLOR_BUFFER_BIT);
+}
+
 void unloadTexture(unsigned int& texture) {
 	glDeleteTextures(1, &texture);
 }
 
-void drawRectangle(Vector2 position, Vector2 size, Vector3 color) {
+void drawRectangle(Vector2 position, Vector2 size, Vector3 color, Shader& shader) {
 	float ndcX1 = (position.x / Settings::WIDTH) * 2.0f - 1.0f;
 	float ndcY1 = 1.0f - (position.y / Settings::HEIGHT) * 2.0f;
 	float ndcX2 = ((position.x + size.x) / Settings::WIDTH) * 2.0f - 1.0f;
@@ -96,6 +96,8 @@ void drawRectangle(Vector2 position, Vector2 size, Vector3 color) {
 	float norR = color.x / 255.0f;
 	float norG = color.y / 255.0f;
 	float norB = color.z / 255.0f;
+
+	shader.use();
 
 	glBindVertexArray(VAO);
 
@@ -115,7 +117,7 @@ void drawRectangle(Vector2 position, Vector2 size, Vector3 color) {
 	glBindVertexArray(0);
 }
 
-void drawTriangle(Vector2 p1, Vector2 p2, Vector2 p3, Vector3 color) {
+void drawTriangle(Vector2 p1, Vector2 p2, Vector2 p3, Vector3 color, Shader& shader) {
 	float ndcP1X = (p1.x / Settings::WIDTH) * 2.0f - 1.0f;
 	float ndsP1Y = 1.0f - (p1.y / Settings::HEIGHT) * 2.0f;
 	float ndcP2X = (p2.x / Settings::WIDTH) * 2.0f - 1.0f;
@@ -133,6 +135,8 @@ void drawTriangle(Vector2 p1, Vector2 p2, Vector2 p3, Vector3 color) {
 		ndcP3X, ndsP3Y, 0.0f, norR, norG, norB, 0.0f, 0.0f
 	};
 
+	shader.use();
+
 	glBindVertexArray(VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -143,7 +147,7 @@ void drawTriangle(Vector2 p1, Vector2 p2, Vector2 p3, Vector3 color) {
 	glBindVertexArray(0);
 }
 
-void drawTexture(unsigned int& textureIndex, Vector2 position, Vector2 size) {
+void drawTexture(unsigned int& textureIndex, Vector2 position, Vector2 size, Shader& shader) {
 	float ndcX1 = (position.x / Settings::WIDTH) * 2.0f - 1.0f;
 	float ndcY1 = 1.0f - (position.y / Settings::HEIGHT) * 2.0f;
 	float ndcX2 = ((position.x + size.x) / Settings::WIDTH) * 2.0f - 1.0f;
@@ -155,6 +159,8 @@ void drawTexture(unsigned int& textureIndex, Vector2 position, Vector2 size) {
 		ndcX2, ndcY2, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
 		ndcX1, ndcY2, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f
 	};
+
+	shader.use();
 
 	glBindVertexArray(VAO);
 
