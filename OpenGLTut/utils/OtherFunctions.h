@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <Settings.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -9,3 +10,7 @@ void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 
 // Process all input
 void processInput(GLFWwindow* window);
+
+unsigned int initGLFW();
+
+unsigned int initGLAD();

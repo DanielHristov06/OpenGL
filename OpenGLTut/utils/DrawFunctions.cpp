@@ -148,24 +148,29 @@ void drawTriangle(Vector2 p1, Vector2 p2, Vector2 p3, Vector3 color, Shader& sha
 }
 
 void drawTexture(unsigned int& textureIndex, Vector2 position, Vector2 size, Shader& shader) {
-	float ndcX1 = (position.x / Settings::WIDTH) * 2.0f - 1.0f;
-	float ndcY1 = 1.0f - (position.y / Settings::HEIGHT) * 2.0f;
-	float ndcX2 = ((position.x + size.x) / Settings::WIDTH) * 2.0f - 1.0f;
-	float ndcY2 = 1.0f - ((position.y + size.y) / Settings::HEIGHT) * 2.0f;
+	//float ndcX1 = (position.x / Settings::WIDTH) * 2.0f - 1.0f;
+	//float ndcY1 = 1.0f - (position.y / Settings::HEIGHT) * 2.0f;
+	//float ndcX2 = ((position.x + size.x) / Settings::WIDTH) * 2.0f - 1.0f;
+	//float ndcY2 = 1.0f - ((position.y + size.y) / Settings::HEIGHT) * 2.0f;
 
-	float updatedVertices[] = {
-		ndcX1, ndcY1, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
-		ndcX2, ndcY1, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
-		ndcX2, ndcY2, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-		ndcX1, ndcY2, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f
-	};
+	//float updatedVertices[] = {
+	//	ndcX1, ndcY1, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+	//	ndcX2, ndcY1, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+	//	ndcX2, ndcY2, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+	//	ndcX1, ndcY2, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f
+	//};
+
+	glm::mat4 model = glm::mat4(1.0f);
+	model = glm::translate(model, glm::vec3(position.x, position.y, 0.0f));
+	model = glm::scale(model, glm::vec3(size.x, size.y, 1.0f));
 
 	shader.use();
+	shader.setMat4Uniform("transform", glm::value_ptr(model));
 
 	glBindVertexArray(VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(updatedVertices), updatedVertices);
+	//glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(updatedVertices), updatedVertices);
 
 	glBindTexture(GL_TEXTURE_2D, textureIndex);
 

@@ -6,6 +6,10 @@
 #include <stb_image.h>
 #include <glad/glad.h>
 
+#include <glm.hpp>
+#include <gtc/matrix_transform.hpp>
+#include <gtc/type_ptr.hpp>
+
 #include <Vector2.h>
 #include <Vector3.h>
 
